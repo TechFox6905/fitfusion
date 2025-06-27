@@ -4,6 +4,7 @@ require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/mongodb');
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to FitFusion API');
 });
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter)
 
 const PORT = process.env.PORT || 5000;
 
