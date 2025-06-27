@@ -1,13 +1,35 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
+const cookieParser = require('cookie-parser');
+const connectDB = require('./config/mongodb');
+const authRouter = require('./routes/authRouter');
+
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({Credential: true}));
 
-// Healthcheck route
-const healthcheckRoutes = require('./api/healthcheck');
-app.use('/api', healthcheckRoutes);
+app.get('/', (req, res) => {
+  res.send('Welcome to FitFusion API');
+});
+app.use('/api/auth', authRouter);
 
-module.exports = app;
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+    try {
+      await connectDB(); // ⬅️ Wait for DB to connect
+      app.listen(PORT, () => {
+        console.log(`🚀 Server is running on http://localhost:${PORT}`);
+      });
+    } catch (err) {
+      console.error('❌ Failed to connect to MongoDB:', err.message);
+      process.exit(1); // Exit process if DB connection fails
+    }
+  };
+
+startServer(); // ⬅️ Start the server after DB connection
+
