@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const transporter = require('../config/nodemailer'); 
+const {EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE} = require('../config/emailTemplates'); // Import the email template
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -65,7 +66,7 @@ exports.register = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: process.env.NODE_ENV === 'production'? 'none' : 'strict',
       maxage: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -102,7 +103,7 @@ exports.logout = (req, res) => {
 
 exports.sendOtp = async (req, res) => {
   try {
-    const {userId} = req.body;
+    const userId = req.user.userId;
     const user = await User.findById(userId);
 
     if(user.isVerified) {
@@ -119,6 +120,7 @@ exports.sendOtp = async (req, res) => {
       to: user.email,
       subject: "Your OTP for FitFusion",
       text: `Your OTP is ${otp}. It is valid for 10 minutes.`,
+      html: EMAIL_VERIFY_TEMPLATE.replace('{{otp}}', otp).replace('{{email}}', user.email)
     };
     await transporter.sendMail(mailOptions);
 
@@ -126,15 +128,16 @@ exports.sendOtp = async (req, res) => {
   }
   catch (error) {
     console.error("Send OTP error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: error.message });
   }
 }
 
 exports.verifyEmail = async (req, res) => {
-  const { userId, otp } = req.body;
+  const { otp } = req.body;
+  const userId = req.user.userId;
 
-  if (!userId || !otp) {
-    return res.status(400).json({ message: "User ID and OTP are required" });
+  if (!otp) {
+    return res.status(400).json({ message: "OTP is required" });
   }
 
   try {
@@ -197,7 +200,8 @@ exports.sendResetOtp = async (req, res) => {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Password Reset OTP for FitFusion",
-      text: `Your Password Reset OTP is ${otp}. It is valid for 10 minutes.`,
+      //text: `Your Password Reset OTP is ${otp}. It is valid for 10 minutes.`,
+      html: PASSWORD_RESET_TEMPLATE.replace('{{otp}}', otp).replace('{{email}}', user.email)
     };
     await transporter.sendMail(mailOptions);
 
