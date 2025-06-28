@@ -8,10 +8,12 @@ const userRouter = require('./routes/userRouter');
 
 const app = express();
 
+const allowedOrigins = ['http://localhost:5173']
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({Credential: true}));
+app.use(cors({origin: allowedOrigins, credentials: true}));
 
 app.get('/', (req, res) => {
   res.send('Welcome to FitFusion API');

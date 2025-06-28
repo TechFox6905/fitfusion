@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 const Login = () => {
     const navigate = useNavigate();
     
-    const {value} = useContext(AppContent);
     const {backendUrl, setIsLoggedIn, getUserData } = useContext(AppContent);
     const [state, setState] = useState("Sign Up");
     const [name, setName] = useState("");

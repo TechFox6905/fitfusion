@@ -8,7 +8,7 @@ router.post('/register', register);
 router.post('/logout', logout);
 router.post('/send-verify-otp', UserAuth, sendOtp);
 router.post('/verify-account', UserAuth, verifyEmail);
-router.post('/is-auth', UserAuth, isAuthenticated);
+router.get('/is-auth', UserAuth, isAuthenticated);
 router.post('/send-reset-otp', sendResetOtp); 
 router.post('/reset-password', resetPassword);
 
