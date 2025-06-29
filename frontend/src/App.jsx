@@ -1,9 +1,22 @@
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login'; 
+import ResetPassword from './pages/ResetPassword';
+import EmailVerify from './pages/EmailVerify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-4xl font-bold text-blue-600">
-        React + Tailwind v4 ✅
-      </h1>
+    <div>
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/email-verify" element={<EmailVerify />} />
+      </Routes>
     </div>
   );
 }
