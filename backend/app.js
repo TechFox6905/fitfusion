@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/mongodb');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
+const workoutRouter = require('./routes/workoutRouter'); 
 
 const app = express();
 
@@ -15,11 +16,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({origin: allowedOrigins, credentials: true}));
 
+
 app.get('/', (req, res) => {
   res.send('Welcome to FitFusion API');
 });
 app.use('/api/auth', authRouter);
-app.use('/api/user', userRouter)
+app.use('/api/user', userRouter);
+app.use('/api/workout', workoutRouter); 
 
 const PORT = process.env.PORT || 5000;
 
