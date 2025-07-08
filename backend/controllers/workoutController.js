@@ -1,4 +1,4 @@
-const { getFilteredExercisesForUser } = require('../services/workoutService'); // or wherever your service is
+const { getFilteredExercisesForUser } = require('../services/getExercise'); 
 
 const getFilteredWorkoutsController = async (req, res) => {
     try {

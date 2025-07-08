@@ -5,5 +5,6 @@ const { getFilteredWorkoutsController } = require('../controllers/workoutControl
 
 router.post('/preferences', createPreference);
 router.get('/personalized/:userId', getFilteredWorkoutsController);
+
   
 module.exports = router;
