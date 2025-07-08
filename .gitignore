@@ -26,3 +26,4 @@ dist-ssr
 #Extra files
 create_struc.py
 data.json
+.env
