@@ -73,7 +73,17 @@ const UserPreferenceSchema = new mongoose.Schema({
       'Bands', 'Barbell', 'Body Only', 'Cable', 'Dumbbell', 'E-Z Curl Bar',
       'Exercise Ball', 'Foam Roll', 'Kettlebells', 'Machine', 'Medicine Ball', 'None', 'Other'
     ]
-  }]
+  }],
+  AvaliableDays: [{
+    type: String,
+    enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  }],
+  NumberOfDays: {
+    type: Number,
+    min: 2,
+    max: 7,
+    default: 4
+  },
 });
 
 module.exports = mongoose.model('UserPreference', UserPreferenceSchema);
